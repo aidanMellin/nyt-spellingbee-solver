@@ -49,8 +49,8 @@ class Words:
         self.longestWord = 0 #Just set an upper bound on how deep we can search recursively
 
         self.MIN_LEN_ANS_RTN = 3 #Change this if you want to include words < len(3)
-        self.NYT_EXACT_SEARCH_STRING = True #Should it be exactly 7 letters on input?
-        self.USE_CENTER_LETTER = True #Should it use the center letter to determine if it's a valid answer?
+        self.NYT_EXACT_SEARCH_STRING = False
+        self.USE_CENTER_LETTER = False
 
     """load words into trie from a file
     """
@@ -100,10 +100,16 @@ class Words:
         temp = ""
         ans = []
 
+        """DFS on the word trie to find words that:
+                - > 3 letters (or whatever self.MIN_LEN_ANS_RTN is set to)
+                - Center letter exists in the word OR self.USE_CENTER_LETTER is set to false
+                - Exists in the word trie
+            Uses backtracking to find all possible solutions with a maximum depth recursion that is the length of the longest word in the passed dictionary file
+        """
         def dfs(temp):
             #if its a valid word, if we have the center letter [optional], if its length is > minimum allowed
             if (self.words.search(temp) and 
-                    (self.centerLetter in temp and self.USE_CENTER_LETTER) and
+                    (self.centerLetter in temp or not self.USE_CENTER_LETTER) and
                     len(temp) > self.MIN_LEN_ANS_RTN):
                 ans.append(temp)
                 return
