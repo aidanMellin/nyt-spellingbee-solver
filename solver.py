@@ -50,9 +50,10 @@ class Words:
     """load words into trie from a file
     """
     def load_words(self, fn):
+        print("Trie-ing your words\n")
         with open(fn, "r") as f:
             for line in f:
-                self.words.insert(line.strip()) #Put it in the trie
+                self.words.insert(line.strip().lower()) #Put it in the trie
                 self.longestWord = max(len(line), self.longestWord) #Longest word check
 
     """
@@ -118,7 +119,7 @@ class Words:
         search_mask = bitmask(self.searchLetters) #Get the base mask to compare against
         for word in ans:
             word_mask = bitmask(word) #Mask the word to compare
-            if (word_mask & search_mask) == search_mask: #Bitwise AND against word_mask and search to determine if all letters appear at least once
+            if (word_mask & search_mask) == search_mask: 
                 pangrams.append(word)
             
         return (pangrams, ans)
@@ -132,8 +133,10 @@ class Words:
 # myTrie.insert("gin")
 
 w = Words()
-w.load_words("words.txt")
-w.find_words("liorgyv")
+
+w.load_words(input("Enter a filename that you would like to use as your wordbase: "))
+
+w.find_words(input("Enter your letters you would like to search for, with the center letter as the first added letter: ").replace(" ", "").replace(",", ""))
 # w.words = myTrie
 # w.searchLetters = "gloni"
 # w.centerLetter = "g"
