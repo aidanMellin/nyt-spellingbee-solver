@@ -49,8 +49,8 @@ class Words:
         self.longestWord = 0 #Just set an upper bound on how deep we can search recursively
 
         self.MIN_LEN_ANS_RTN = 3 #Change this if you want to include words < len(3)
-        self.NYT_EXACT_SEARCH_STRING = True
-        self.USE_CENTER_LETTER = True
+        self.NYT_EXACT_SEARCH_STRING = True #Should it be exactly 7 letters on input?
+        self.USE_CENTER_LETTER = True #Should it use the center letter to determine if it's a valid answer?
 
     """load words into trie from a file
     """
