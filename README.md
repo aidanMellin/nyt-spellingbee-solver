@@ -17,5 +17,3 @@ Fairly simple day project to help me practice Tries, Recursion, etc
      - bitwise or + shift a 1 x digits left where x is the ord(current character) - ord('a')
 5. Return the pangram and answer list
 6. Profit 
-
-[![Video](file:demoRec.mp4)
