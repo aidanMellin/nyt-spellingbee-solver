@@ -1,4 +1,5 @@
-import pprint
+import os
+import string
 
 class Node:
     def __init__(self):
@@ -47,9 +48,16 @@ class Words:
         self.centerLetter = None #The letter that needs to be present in every search
         self.longestWord = 0 #Just set an upper bound on how deep we can search recursively
 
+        self.MIN_LEN_ANS_RTN = 3 #Change this if you want to include words < len(3)
+        self.NYT_EXACT_SEARCH_STRING = True
+        self.USE_CENTER_LETTER = True
+
     """load words into trie from a file
     """
     def load_words(self, fn):
+        while not os.path.isfile(fn):
+            print("File must exist in current context!")
+            fn = input("Enter a filename that you would like to use as your wordbase: ")
         print("Trie-ing your words\n")
         with open(fn, "r") as f:
             for line in f:
@@ -61,9 +69,11 @@ class Words:
     Precondition: the first alpha character in the string MUST be the central letter that determines if a word is valid or not
     """
     def find_words(self, searchLetters):
+        while(not len(searchLetters) == 7 and self.NYT_EXACT_SEARCH_STRING):
+            print("Search string not to NYT specs. Set NYT_EXACT_SEARCH_STRING variable to false to disable this feature")
+            searchLetters = input("Enter your letters you would like to search for, with the center letter as the first added letter: ").replace(" ", "").replace(",", "")
         self.searchLetters = searchLetters
-        # assert searchletters = 5 total characters (or 7 maybe, cant remember)
-        self.centerLetter = searchLetters[0]
+        self.centerLetter = searchLetters[0] #Will always assume 0th index is the primary letter
         return self.find_valid_permutations()
 
     """Use DFS to find all valid permutations with duplicate values .
@@ -91,8 +101,10 @@ class Words:
         ans = []
 
         def dfs(temp):
+            #if its a valid word, if we have the center letter [optional], if its length is > minimum allowed
             if (self.words.search(temp) and 
-                    self.centerLetter in temp):
+                    (self.centerLetter in temp and self.USE_CENTER_LETTER) and
+                    len(temp) > self.MIN_LEN_ANS_RTN):
                 ans.append(temp)
                 return
             for i in self.searchLetters:
@@ -121,7 +133,8 @@ class Words:
             word_mask = bitmask(word) #Mask the word to compare
             if (word_mask & search_mask) == search_mask: 
                 pangrams.append(word)
-            
+        
+        ans.sort(key=lambda x: len(x))
         return (pangrams, ans)
 
 # myTrie = Trie()
